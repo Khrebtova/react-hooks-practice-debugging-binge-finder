@@ -6,7 +6,7 @@ function Filter(props) {
       <h4> Filter By Rating </h4>
       <select
         placeholder="Filter by average rating"
-        onChange={props.handleFilter}
+        onChange={(e)=> props.handleFilter(e)}
       >
         <option>No Filter</option>
         <option value="1">1</option>
@@ -22,3 +22,5 @@ function Filter(props) {
     </div>
   );
 }
+
+export default Filter;

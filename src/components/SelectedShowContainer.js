@@ -1,13 +1,25 @@
 import React, { useState } from "react";
-import Episode from "./Components/Episode";
+import Episode from "./Episode";
 
 function SelectedShowContainer(props) {
-  const selectedSeason = useState(1);
+  const [selectedSeason, setSelectedSeason] = useState(1);
+  const { selectedShow } = props;
+  
+
+  // eslint-disable-next-line no-extend-native
+  Array.prototype.unique = function () {
+    const arr = [];
+    for (let i = 0; i < this.length; i++) {
+      if (!arr.includes(this[i])) {
+        arr.push(this[i]);
+      }
+    }
+    return arr;  
+  };
 
   function mapSeasons() {
-    if (!!props.episodes) {
-      let seasons = props.episodes.map((e) => e.season).unique();
-
+    if (!!props.allEpisodes) {
+      let seasons = props.allEpisodes.map((e) => e.season).unique();
       return seasons.map((s) => {
         return (
           <option value={s} key={s}>
@@ -19,18 +31,12 @@ function SelectedShowContainer(props) {
   }
 
   function mapEpisodes() {
-    return props.episodes.map((e) => {
-      if (e.season == selectedSeason) {
-        return <Episode eachEpisode={e} key={e.id} />;
-      }
-    });
-  }
+    return props.allEpisodes.map(e => e.season === parseInt(selectedSeason) ? <Episode myEpisode={e} key={e.id} />  : null )
+    }
 
   function handleSelectionChange(e) {
-    selectedSeason = e.target.value;
+    setSelectedSeason(e.target.value);
   }
-
-  const { selectedShow } = props;
 
   return (
     <div style={{ position: "static" }}>
@@ -43,19 +49,10 @@ function SelectedShowContainer(props) {
       <select style={{ display: "block" }} onChange={handleSelectionChange}>
         {mapSeasons()}
       </select>
-      {mapEpisodes()}
+        {mapEpisodes()}
     </div>
   );
 }
 
-export SelectedShowContainer;
 
-Array.prototype.unique = function () {
-  const arr = [];
-  for (let i = 0; i < this.length; i++) {
-    if (!arr.includes(this[i])) {
-      arr.push(this[i]);
-    }
-  }
-  return arr;
-};
+export default SelectedShowContainer;
